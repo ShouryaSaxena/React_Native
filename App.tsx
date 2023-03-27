@@ -1,5 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
+  FlatList,
+  SafeAreaView,
+  // StatusBar,
   StyleSheet,
   View,
   Text,
@@ -7,9 +10,66 @@ import {
   TextInput,
   Button,
   Alert,
+  TouchableOpacity,
+  // TouchableHighlight,
 } from 'react-native';
 
-export default function App() {
+type ItemData = {
+  id: string;
+  title: string;
+};
+
+const DATA: ItemData[] = [
+  {
+    id: 'A',
+    title: 'First Item',
+  },
+  {
+    id: 'B',
+    title: 'Second Item',
+  },
+  {
+    id: 'C',
+    title: 'Third Item',
+  },
+];
+
+type ItemProps = {
+  item: ItemData;
+  onPress: () => void;
+  backgroundColor: string;
+  textColor: string;
+};
+
+const Item = ({item, onPress, backgroundColor, textColor}: ItemProps) => (
+  <TouchableOpacity onPress={onPress} style={[styles.item, {backgroundColor}]}>
+    <Text style={[styles.title, {color: textColor}]}>{item.title}</Text>
+  </TouchableOpacity>
+);
+
+export default function App(this: any) {
+  // const onPressingBtn1 = () => {
+  //   Alert.alert('Opacity Button Pressed');
+  // };
+  // const onPressingBtn2 = () => {
+  //   Alert.alert('Highlight Button Pressed');
+  // };
+
+  const [selectedId, setSelectedId] = useState<string>();
+
+  const renderItem = ({item}: {item: ItemData}) => {
+    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
+    const color = item.id === selectedId ? 'white' : 'black';
+
+    return (
+      <Item
+        item={item}
+        onPress={() => setSelectedId(item.id)}
+        backgroundColor={backgroundColor}
+        textColor={color}
+      />
+    );
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.dummyText}>Dental Care</Text>
@@ -29,6 +89,24 @@ export default function App() {
           onPress={() => Alert.alert('Welcome! Happy to have you. ')}
         />
       </View>
+      {/* <TouchableOpacity onPress={() => onPressingBtn1()} style={styles.btn}>
+        <View>
+          <Text style={{color: 'red'}}>TouchableOpacity</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableHighlight onPress={() => onPressingBtn2()} style={styles.btn}>
+        <View>
+          <Text style={{color: 'blue'}}>TouchableHighlight</Text>
+        </View>
+      </TouchableHighlight> */}
+      <SafeAreaView>
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          extraData={selectedId}
+        />
+      </SafeAreaView>
     </View>
   );
 }
@@ -90,5 +168,24 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     width: '48%',
     textAlign: 'center',
+  },
+  btn: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 4,
+    backgroundColor: 'oldlace',
+    alignSelf: 'center',
+    marginHorizontal: '1%',
+    marginBottom: 6,
+    width: '48%',
+    textAlign: 'center',
+  },
+  item: {
+    padding: 5,
+    marginVertical: 5,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 20,
   },
 });
