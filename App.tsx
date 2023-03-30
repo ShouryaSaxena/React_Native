@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
+import Axios from 'axios';
 import {
   FlatList,
   SafeAreaView,
@@ -8,105 +11,47 @@ import {
   Text,
   Image,
   TextInput,
-  Button,
+  // Button,
   Alert,
   TouchableOpacity,
   // TouchableHighlight,
 } from 'react-native';
 
-type ItemData = {
-  id: string;
-  title: string;
-};
-
-const DATA: ItemData[] = [
-  {
-    id: 'A',
-    title: 'First Item',
-  },
-  {
-    id: 'B',
-    title: 'Second Item',
-  },
-  {
-    id: 'C',
-    title: 'Third Item',
-  },
-];
-
-type ItemProps = {
-  item: ItemData;
-  onPress: () => void;
-  backgroundColor: string;
-  textColor: string;
-};
-
-const Item = ({item, onPress, backgroundColor, textColor}: ItemProps) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, {backgroundColor}]}>
-    <Text style={[styles.title, {color: textColor}]}>{item.title}</Text>
-  </TouchableOpacity>
-);
-
 export default function App(this: any) {
-  // const onPressingBtn1 = () => {
-  //   Alert.alert('Opacity Button Pressed');
-  // };
-  // const onPressingBtn2 = () => {
-  //   Alert.alert('Highlight Button Pressed');
-  // };
-
-  const [selectedId, setSelectedId] = useState<string>();
-
-  const renderItem = ({item}: {item: ItemData}) => {
-    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
-    const color = item.id === selectedId ? 'white' : 'black';
-
-    return (
-      <Item
-        item={item}
-        onPress={() => setSelectedId(item.id)}
-        backgroundColor={backgroundColor}
-        textColor={color}
-      />
-    );
+  const onPressingBtn1 = () => {
+    Alert.alert('Login Button Pressed');
+  };
+  const onPressingBtn2 = () => {
+    Alert.alert('Register Button Pressed');
   };
   return (
     <View style={styles.container}>
       <Text style={styles.dummyText}>Dental Care</Text>
       <Image style={styles.logo} source={require('./logo.png')} />
-      <TextInput placeholder="UserName" style={styles.primaryInput} />
-      <TextInput placeholder="Password" style={styles.primaryInput} />
+      <TextInput
+        textContentType="emailAddress"
+        placeholder="E-mail Address"
+        style={styles.primaryInput}
+      />
+      <TextInput
+        textContentType="password"
+        placeholder="Password"
+        style={styles.primaryInput}
+      />
       <View style={styles.options}>
-        <Button
-          // Some properties given to Button
-          title="Login"
-          color="#ff0000"
-          onPress={() => Alert.alert('Welcome Back !')}
-        />
-        <Button
-          // Some properties given to Button
-          title="Sign-up"
-          onPress={() => Alert.alert('Welcome! Happy to have you. ')}
-        />
+        <TouchableOpacity onPress={() => onPressingBtn1()} style={styles.login}>
+          <View>
+            <Text style={{color: 'white', alignSelf: 'center'}}>Login</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => onPressingBtn2()}
+          style={styles.register}>
+          <View>
+            <Text style={{color: 'white', alignSelf: 'center'}}>Register</Text>
+          </View>
+        </TouchableOpacity>
       </View>
-      {/* <TouchableOpacity onPress={() => onPressingBtn1()} style={styles.btn}>
-        <View>
-          <Text style={{color: 'red'}}>TouchableOpacity</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableHighlight onPress={() => onPressingBtn2()} style={styles.btn}>
-        <View>
-          <Text style={{color: 'blue'}}>TouchableHighlight</Text>
-        </View>
-      </TouchableHighlight> */}
-      <SafeAreaView>
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          extraData={selectedId}
-        />
-      </SafeAreaView>
     </View>
   );
 }
@@ -114,7 +59,6 @@ export default function App(this: any) {
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    paddingTop: '5%',
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: 'black',
@@ -124,8 +68,8 @@ const styles = StyleSheet.create({
     height: 125,
     margin: 'auto',
     alignSelf: 'center',
-    marginTop: '10%',
-    marginBottom: '10%',
+    marginTop: '5%',
+    marginBottom: '5%',
   },
   dummyText: {
     alignSelf: 'center',
@@ -138,6 +82,7 @@ const styles = StyleSheet.create({
   },
   primaryInput: {
     marginTop: '5%',
+    backgroundColor: 'black',
     alignSelf: 'center',
     color: 'white',
     fontSize: 20,
@@ -147,7 +92,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dotted',
     borderColor: 'white',
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 30,
   },
   options: {
     marginTop: '10%',
@@ -158,27 +103,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
   },
-  Button: {
+  login: {
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 4,
-    backgroundColor: 'oldlace',
-    alignSelf: 'flex-start',
-    marginHorizontal: '1%',
-    marginBottom: 6,
-    width: '48%',
-    textAlign: 'center',
-  },
-  btn: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 4,
-    backgroundColor: 'oldlace',
+    backgroundColor: 'red',
     alignSelf: 'center',
     marginHorizontal: '1%',
     marginBottom: 6,
-    width: '48%',
-    textAlign: 'center',
+    width: '28%',
+  },
+  register: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 4,
+    backgroundColor: 'blue',
+    alignSelf: 'center',
+    marginHorizontal: '1%',
+    marginBottom: 6,
+    width: '28%',
   },
   item: {
     padding: 5,
